@@ -1,0 +1,32 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Railway/Render
+        run: echo "Add deployment step for your platform"
+        # Uncomment for Railway:
+        # - uses: railwayapp/railway-github-action@v1
+        #   with:
+        #     service: api
+        #   env:
+        #     RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  deploy-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Vercel
+        run: echo "Add Vercel deployment"
+        # Vercel auto-deploys from GitHub, or use:
+        # - uses: amondnet/vercel-action@v25
+        #   with:
+        #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}

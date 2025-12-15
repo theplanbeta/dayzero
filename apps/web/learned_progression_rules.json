@@ -1,0 +1,70 @@
+{
+  "A1": {
+    "sentenceLength": "4-8 words average",
+    "vocabulary": "500 most common German words",
+    "grammar": "present tense, basic word order",
+    "topics": [
+      "daily routines",
+      "family",
+      "food",
+      "shopping"
+    ],
+    "textLength": "50-100 words",
+    "readingTime": "2-3 minutes",
+    "comprehensionLevel": "literal understanding"
+  },
+  "A2": {
+    "sentenceLength": "6-12 words average",
+    "vocabulary": "1000-1500 words, introduce past tense vocabulary",
+    "grammar": "past tense, modal verbs, simple subordinate clauses",
+    "topics": [
+      "past experiences",
+      "future plans",
+      "opinions",
+      "descriptions"
+    ],
+    "textLength": "100-200 words",
+    "readingTime": "3-5 minutes",
+    "comprehensionLevel": "basic inference"
+  },
+  "B1": {
+    "sentenceLength": "8-15 words average",
+    "vocabulary": "1500-2500 words, introduce complex actions vocabulary",
+    "grammar": "complex sentences, reported speech, conditional sentences",
+    "topics": [
+      "science and technology",
+      "politics",
+      "economy",
+      "culture"
+    ],
+    "textLength": "200-300 words",
+    "readingTime": "5-7 minutes",
+    "comprehensionLevel": "inference with some nuance"
+  },
+  "B2": {
+    "sentenceLength": "10-18 words average",
+    "vocabulary": "2500-3500 words, introduce formal language and technical vocabulary",
+    "grammar": "subjunctive, advanced syntax, nuanced expressions",
+    "topics": [
+      "philosophy",
+      "history",
+      "social sciences",
+      "arts"
+    ],
+    "textLength": "300-400 words",
+    "readingTime": "7-10 minutes",
+    "comprehensionLevel": "inference with nuance and subtlety"
+  },
+  "C1": {
+    "sentenceLength": "12+ words average",
+    "vocabulary": "3500+ words, introduce specialized terminology and idiomatic language",
+    "grammar": "nuanced expressions, idiomatic language, figurative language",
+    "topics": [
+      "technical vocabulary",
+      "jargon"
+    ],
+    "textLength": "400+ words",
+    "readingTime": "10+ minutes",
+    "comprehensionLevel": "inference with high nuance and subtlety"
+  }
+}
