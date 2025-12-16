@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { saveMentor, unsaveMentor } from '@/lib/api/mentors'
@@ -11,17 +11,44 @@ interface MentorCardProps {
   onSaveChange?: () => void
 }
 
+// Generate initials from name
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
+}
+
+// Generate a consistent gradient based on name
+function getAvatarGradient(name: string): string {
+  const gradients = [
+    'from-blue-500 to-cyan-500',
+    'from-purple-500 to-pink-500',
+    'from-green-500 to-emerald-500',
+    'from-orange-500 to-red-500',
+    'from-indigo-500 to-violet-500',
+    'from-teal-500 to-cyan-500',
+    'from-rose-500 to-pink-500',
+    'from-amber-500 to-orange-500',
+  ]
+  const index = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % gradients.length
+  return gradients[index]
+}
+
 export default function MentorCard({ mentor, onSaveChange }: MentorCardProps) {
   const [isSaved, setIsSaved] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
   // Check if saved on mount
-  useState(() => {
+  useEffect(() => {
     if (typeof window !== 'undefined') {
-      const saved = JSON.parse(localStorage.getItem('gb_saved_mentors') || '[]')
+      const saved = JSON.parse(localStorage.getItem('dz_saved_mentors') || '[]')
       setIsSaved(saved.includes(mentor.id))
     }
-  })
+  }, [mentor.id])
 
   const handleSaveToggle = async (e: React.MouseEvent) => {
     e.preventDefault() // Prevent link navigation
@@ -116,13 +143,24 @@ export default function MentorCard({ mentor, onSaveChange }: MentorCardProps) {
 
       {/* Avatar and availability indicator */}
       <div className="relative w-20 h-20 mx-auto mb-4">
-        <Image
-          src={mentor.avatar}
-          alt={mentor.name}
-          width={80}
-          height={80}
-          className="rounded-full border-2 border-gray-700 group-hover:border-blue-500/50 transition-all duration-300"
-        />
+        {mentor.avatar && !imageError ? (
+          <Image
+            src={mentor.avatar}
+            alt={mentor.name}
+            width={80}
+            height={80}
+            className="rounded-full border-2 border-gray-700 group-hover:border-blue-500/50 transition-all duration-300 object-cover"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div
+            className={`w-20 h-20 rounded-full bg-gradient-to-br ${getAvatarGradient(
+              mentor.name
+            )} flex items-center justify-center border-2 border-gray-700 group-hover:border-blue-500/50 transition-all duration-300`}
+          >
+            <span className="text-white font-bold text-xl">{getInitials(mentor.name)}</span>
+          </div>
+        )}
         {mentor.availableToday && (
           <div className="absolute bottom-0 right-0 w-5 h-5 bg-green-500 rounded-full border-2 border-gray-800 flex items-center justify-center">
             <div className="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse" />
@@ -176,7 +214,7 @@ export default function MentorCard({ mentor, onSaveChange }: MentorCardProps) {
       <div className="flex items-center justify-between pt-3 border-t border-gray-700/50">
         <div>
           <div className="text-xs text-gray-400 mb-0.5">Per session</div>
-          <div className="text-xl font-bold text-white">€{mentor.pricePerSession}</div>
+          <div className="text-xl font-bold text-white">${mentor.pricePerSession}</div>
         </div>
         <button className="relative group/btn px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105">
           <span className="relative z-10">Quick Book</span>

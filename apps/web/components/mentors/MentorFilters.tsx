@@ -14,20 +14,20 @@ interface MentorFiltersProps {
 }
 
 const LANGUAGES = [
-  'German',
   'English',
   'Spanish',
+  'Mandarin',
   'French',
-  'Turkish',
-  'Arabic',
+  'Hindi',
+  'Korean',
   'Russian',
-  'Polish',
-  'Italian',
+  'Portuguese',
+  'Japanese',
 ]
 
 export default function MentorFilters({ filters, onFiltersChange }: MentorFiltersProps) {
   const [minPrice, setMinPrice] = useState(filters.minPrice || 0)
-  const [maxPrice, setMaxPrice] = useState(filters.maxPrice || 100)
+  const [maxPrice, setMaxPrice] = useState(filters.maxPrice || 300)
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(filters.languages || [])
   const [availableNow, setAvailableNow] = useState(filters.availableNow || false)
   const [minRating, setMinRating] = useState(filters.minRating || 0)
@@ -64,14 +64,14 @@ export default function MentorFilters({ filters, onFiltersChange }: MentorFilter
 
   const handleClearFilters = () => {
     setMinPrice(0)
-    setMaxPrice(100)
+    setMaxPrice(300)
     setSelectedLanguages([])
     setAvailableNow(false)
     setMinRating(0)
     onFiltersChange({})
   }
 
-  const hasActiveFilters = minPrice > 0 || maxPrice < 100 || selectedLanguages.length > 0 || availableNow || minRating > 0
+  const hasActiveFilters = minPrice > 0 || maxPrice < 300 || selectedLanguages.length > 0 || availableNow || minRating > 0
 
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-5">
@@ -104,7 +104,7 @@ export default function MentorFilters({ filters, onFiltersChange }: MentorFilter
               <div className="flex-1">
                 <label className="block text-xs text-gray-400 mb-1">Min</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">€</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
                   <input
                     type="number"
                     value={minPrice}
@@ -118,7 +118,7 @@ export default function MentorFilters({ filters, onFiltersChange }: MentorFilter
               <div className="flex-1">
                 <label className="block text-xs text-gray-400 mb-1">Max</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">€</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
                   <input
                     type="number"
                     value={maxPrice}
@@ -134,7 +134,7 @@ export default function MentorFilters({ filters, onFiltersChange }: MentorFilter
               <input
                 type="range"
                 min="0"
-                max="100"
+                max="300"
                 value={maxPrice}
                 onChange={(e) => handlePriceChange('max', Number(e.target.value))}
                 className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"

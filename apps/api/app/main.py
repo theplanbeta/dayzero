@@ -89,6 +89,20 @@ try:
 except Exception as e:
     logger.error(f"Failed to include Profiles router: {e}")
 
+try:
+    from .routers.import_linkedin import router as import_linkedin_router
+    app.include_router(import_linkedin_router)
+    logger.info("LinkedIn Import router included")
+except Exception as e:
+    logger.error(f"Failed to include LinkedIn Import router: {e}")
+
+try:
+    from .routers.auth import router as auth_router
+    app.include_router(auth_router)
+    logger.info("Auth router included")
+except Exception as e:
+    logger.error(f"Failed to include Auth router: {e}")
+
 # API Routes
 @app.get("/")
 async def root():

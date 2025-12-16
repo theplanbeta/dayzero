@@ -2,7 +2,15 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['playphrase.me', 'cdn.dayzero.xyz', 'www.youtube.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'playphrase.me' },
+      { protocol: 'https', hostname: 'cdn.dayzero.xyz' },
+      { protocol: 'https', hostname: 'www.youtube.com' },
+      { protocol: 'https', hostname: 'i.pravatar.cc' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'randomuser.me' },
+      { protocol: 'https', hostname: 'ui-avatars.com' },
+    ],
   },
   async headers() {
     return [

@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 from app.database import engine, SessionLocal, Base, hash_password
 from app.models.mentoring import (
     Profile, Category, MentorCategory, ExpertiseTag, MentorTag,
-    AvailabilitySlot, ExpertiseLevel
+    AvailabilitySlot, ExpertiseLevelEnum as ExpertiseLevel
 )
 
 

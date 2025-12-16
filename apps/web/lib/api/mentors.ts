@@ -54,102 +54,102 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 const MOCK_MENTORS: Mentor[] = [
   {
     id: '1',
-    name: 'Dr. Sarah Weber',
-    headline: 'Senior Medical Resident | Internal Medicine',
+    name: 'Dr. Sarah Chen',
+    headline: 'VP of Engineering | Ex-Google, Ex-Meta',
     avatar: 'https://i.pravatar.cc/150?img=1',
     rating: 4.9,
     sessionCount: 247,
-    pricePerSession: 45,
-    category: 'Medicine',
-    languages: ['German', 'English'],
+    pricePerSession: 150,
+    category: 'Engineering',
+    languages: ['English', 'Mandarin'],
     availableToday: true,
-    expertise: ['Medical German', 'Clinical Rotations', 'FSP Exam', 'Approbation'],
-    about: 'I help international doctors navigate the German healthcare system and prepare for their Approbation. With 5+ years of experience mentoring medical professionals, I understand the challenges you face.',
+    expertise: ['System Design', 'Leadership', 'Career Growth', 'Technical Interviews'],
+    about: 'I help engineers level up their careers. With 15+ years at top tech companies, I understand what it takes to grow from IC to VP.',
     nextAvailableSlots: ['2025-12-14T10:00:00Z', '2025-12-14T14:00:00Z', '2025-12-15T09:00:00Z', '2025-12-16T11:00:00Z', '2025-12-17T15:00:00Z'],
     totalReviews: 189,
     isPremium: true,
   },
   {
     id: '2',
-    name: 'Michael Schneider',
-    headline: 'Senior Software Engineer at SAP',
+    name: 'Michael Rodriguez',
+    headline: 'Senior Product Manager at Stripe',
     avatar: 'https://i.pravatar.cc/150?img=12',
     rating: 4.8,
     sessionCount: 312,
-    pricePerSession: 35,
-    category: 'Engineering',
-    languages: ['German', 'English', 'Turkish'],
+    pricePerSession: 120,
+    category: 'Product',
+    languages: ['English', 'Spanish'],
     availableToday: false,
-    expertise: ['Job Search', 'Technical Interviews', 'CV Review', 'Visa Process'],
-    about: 'Former international student turned senior engineer. I help developers land their dream jobs in Germany and navigate the tech industry here.',
+    expertise: ['Product Strategy', 'User Research', 'Roadmapping', 'PM Interviews'],
+    about: 'Former engineer turned PM. I help aspiring PMs break into the field and current PMs level up their craft.',
     nextAvailableSlots: ['2025-12-15T16:00:00Z', '2025-12-16T10:00:00Z', '2025-12-17T14:00:00Z', '2025-12-18T09:00:00Z', '2025-12-19T11:00:00Z'],
     totalReviews: 267,
     isPremium: false,
   },
   {
     id: '3',
-    name: 'Anna Müller',
-    headline: 'Registered Nurse | University Hospital Munich',
+    name: 'Priya Sharma',
+    headline: 'Data Science Lead at Netflix',
     avatar: 'https://i.pravatar.cc/150?img=5',
     rating: 4.95,
     sessionCount: 156,
-    pricePerSession: 40,
-    category: 'Nursing',
-    languages: ['German', 'English', 'Spanish'],
+    pricePerSession: 130,
+    category: 'Data',
+    languages: ['English', 'Hindi'],
     availableToday: true,
-    expertise: ['Nursing License', 'German Healthcare', 'Medical Terminology', 'Integration'],
-    about: 'I mentor international nurses through their license recognition process and help them integrate into the German healthcare system.',
+    expertise: ['Machine Learning', 'Data Strategy', 'A/B Testing', 'Career Switch'],
+    about: 'I mentor professionals transitioning into data science and help data scientists grow into leadership roles.',
     nextAvailableSlots: ['2025-12-14T13:00:00Z', '2025-12-15T10:00:00Z', '2025-12-16T14:00:00Z', '2025-12-17T09:00:00Z', '2025-12-18T16:00:00Z'],
     totalReviews: 142,
     isPremium: true,
   },
   {
     id: '4',
-    name: 'Thomas Fischer',
-    headline: 'Immigration Consultant & Life Coach',
+    name: 'James Thompson',
+    headline: 'Executive Coach | Former McKinsey Partner',
     avatar: 'https://i.pravatar.cc/150?img=13',
     rating: 4.7,
     sessionCount: 423,
-    pricePerSession: 30,
-    category: 'Life in Germany',
-    languages: ['German', 'English', 'French'],
+    pricePerSession: 200,
+    category: 'Career',
+    languages: ['English', 'French'],
     availableToday: true,
-    expertise: ['Visa & Permits', 'Finding Apartments', 'Banking', 'Cultural Integration'],
-    about: 'With 10+ years helping expats settle in Germany, I provide practical guidance on everything from bureaucracy to making friends.',
+    expertise: ['Executive Presence', 'Career Transitions', 'Negotiation', 'Leadership'],
+    about: 'I help professionals navigate career transitions and develop executive presence. Specialized in tech and consulting.',
     nextAvailableSlots: ['2025-12-14T11:00:00Z', '2025-12-14T15:00:00Z', '2025-12-15T13:00:00Z', '2025-12-16T10:00:00Z', '2025-12-17T14:00:00Z'],
     totalReviews: 381,
     isPremium: false,
   },
   {
     id: '5',
-    name: 'Dr. Elena Popov',
-    headline: 'Cardiologist | Premium Mentor',
+    name: 'Dr. Elena Volkov',
+    headline: 'CTO & Startup Advisor | Premium Mentor',
     avatar: 'https://i.pravatar.cc/150?img=9',
     rating: 5.0,
     sessionCount: 89,
-    pricePerSession: 75,
+    pricePerSession: 250,
     category: 'Premium',
-    languages: ['German', 'English', 'Russian'],
+    languages: ['English', 'Russian'],
     availableToday: false,
-    expertise: ['Specialist Training', 'Research', 'Career Planning', 'Work-Life Balance'],
-    about: 'Premium mentorship for medical professionals seeking specialist training. I offer personalized career coaching and research guidance.',
+    expertise: ['Startup Strategy', 'Fundraising', 'Technical Leadership', 'Scaling Teams'],
+    about: 'Premium mentorship for founders and CTOs. I\'ve built and scaled 3 startups, including one to IPO.',
     nextAvailableSlots: ['2025-12-16T14:00:00Z', '2025-12-18T10:00:00Z', '2025-12-20T11:00:00Z', '2025-12-22T15:00:00Z', '2025-12-23T09:00:00Z'],
     totalReviews: 89,
     isPremium: true,
   },
   {
     id: '6',
-    name: 'Lisa Wagner',
-    headline: 'Data Scientist at Siemens',
+    name: 'Lisa Park',
+    headline: 'Engineering Manager at Airbnb',
     avatar: 'https://i.pravatar.cc/150?img=16',
     rating: 4.85,
     sessionCount: 198,
-    pricePerSession: 38,
-    category: 'Engineering',
-    languages: ['German', 'English'],
+    pricePerSession: 100,
+    category: 'Leadership',
+    languages: ['English', 'Korean'],
     availableToday: true,
-    expertise: ['Data Science', 'Python', 'Career Switch', 'Networking'],
-    about: 'Helping professionals transition into data science roles in Germany. I share insights on the industry and job market.',
+    expertise: ['Engineering Management', 'Team Building', 'IC to Manager', '1:1s'],
+    about: 'Helping engineers transition into management. I share frameworks and practical advice from my journey.',
     nextAvailableSlots: ['2025-12-14T16:00:00Z', '2025-12-15T11:00:00Z', '2025-12-16T15:00:00Z', '2025-12-17T10:00:00Z', '2025-12-18T14:00:00Z'],
     totalReviews: 176,
     isPremium: false,
@@ -158,10 +158,11 @@ const MOCK_MENTORS: Mentor[] = [
 
 const MOCK_CATEGORIES: Category[] = [
   { id: 'all', name: 'All Mentors', icon: '🎯', count: 523 },
-  { id: 'engineering', name: 'Engineering', icon: '💻', count: 142 },
-  { id: 'medicine', name: 'Medicine', icon: '⚕️', count: 87 },
-  { id: 'nursing', name: 'Nursing', icon: '👨‍⚕️', count: 64 },
-  { id: 'life', name: 'Life in Germany', icon: '🇩🇪', count: 156 },
+  { id: 'engineering', name: 'Software Engineering', icon: '💻', count: 142 },
+  { id: 'product', name: 'Product Management', icon: '📊', count: 87 },
+  { id: 'data', name: 'Data Science & AI', icon: '🤖', count: 64 },
+  { id: 'career', name: 'Career Growth', icon: '🚀', count: 156 },
+  { id: 'leadership', name: 'Leadership', icon: '👔', count: 89 },
   { id: 'premium', name: 'Premium', icon: '⭐', count: 74 },
 ]
 
@@ -199,7 +200,7 @@ const MOCK_REVIEWS: Review[] = [
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export async function getMentors(filters: MentorFilters = {}): Promise<{ mentors: Mentor[]; total: number }> {
-  await delay(500) // Simulate API delay
+  await delay(300) // Simulate API delay
 
   let filtered = [...MOCK_MENTORS]
 
@@ -222,7 +223,7 @@ export async function getMentors(filters: MentorFilters = {}): Promise<{ mentors
     )
   }
 
-  if (filters.availableNow || filters.availableToday) {
+  if (filters.availableNow) {
     filtered = filtered.filter(m => m.availableToday)
   }
 
@@ -303,10 +304,10 @@ export async function saveMentor(id: string): Promise<boolean> {
 
   // Store in localStorage for now
   if (typeof window !== 'undefined') {
-    const saved = JSON.parse(localStorage.getItem('gb_saved_mentors') || '[]')
+    const saved = JSON.parse(localStorage.getItem('dz_saved_mentors') || '[]')
     if (!saved.includes(id)) {
       saved.push(id)
-      localStorage.setItem('gb_saved_mentors', JSON.stringify(saved))
+      localStorage.setItem('dz_saved_mentors', JSON.stringify(saved))
     }
   }
 
@@ -318,9 +319,9 @@ export async function unsaveMentor(id: string): Promise<boolean> {
 
   // Remove from localStorage
   if (typeof window !== 'undefined') {
-    const saved = JSON.parse(localStorage.getItem('gb_saved_mentors') || '[]')
+    const saved = JSON.parse(localStorage.getItem('dz_saved_mentors') || '[]')
     const updated = saved.filter((savedId: string) => savedId !== id)
-    localStorage.setItem('gb_saved_mentors', JSON.stringify(updated))
+    localStorage.setItem('dz_saved_mentors', JSON.stringify(updated))
   }
 
   return true
@@ -333,7 +334,7 @@ export async function getCategories(): Promise<Category[]> {
 
 export async function isMentorSaved(id: string): Promise<boolean> {
   if (typeof window !== 'undefined') {
-    const saved = JSON.parse(localStorage.getItem('gb_saved_mentors') || '[]')
+    const saved = JSON.parse(localStorage.getItem('dz_saved_mentors') || '[]')
     return saved.includes(id)
   }
   return false

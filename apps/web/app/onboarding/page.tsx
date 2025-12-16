@@ -3,20 +3,28 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronRight, ChevronLeft, Upload, Check } from 'lucide-react';
+import LinkedInImportModal from '@/components/linkedin/LinkedInImportModal';
+import LinkedInImportButton from '@/components/linkedin/LinkedInImportButton';
+import type { LinkedInProfile } from '@/lib/api/linkedin';
 
 type UserRole = 'learner' | 'mentor' | null;
 
 const CATEGORIES = [
-  'German Grammar',
-  'Conversation Practice',
-  'Business German',
-  'Exam Preparation (Goethe, TestDaF)',
-  'Pronunciation',
-  'Writing Skills',
-  'Cultural Insights',
+  'Software Engineering',
+  'Product Management',
+  'Data Science & AI',
+  'UX/UI Design',
+  'Marketing & Growth',
+  'Finance & Investing',
+  'Career Transitions',
+  'Startups & Entrepreneurship',
+  'Leadership & Management',
+  'Healthcare & Medicine',
+  'Legal & Compliance',
+  'Immigration & Visa',
 ];
 
-const EXPERTISE_LEVELS = ['Beginner (A1-A2)', 'Intermediate (B1-B2)', 'Advanced (C1-C2)', 'All Levels'];
+const EXPERTISE_LEVELS = ['Entry Level (0-2 years)', 'Mid Level (2-5 years)', 'Senior (5-10 years)', 'Expert (10+ years)'];
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const TIME_SLOTS = ['Morning (6-12)', 'Afternoon (12-18)', 'Evening (18-24)'];
@@ -29,8 +37,9 @@ export default function OnboardingPage() {
   const [bio, setBio] = useState('');
   const [categories, setCategories] = useState<string[]>([]);
   const [expertise, setExpertise] = useState<string[]>([]);
-  const [hourlyRate, setHourlyRate] = useState('25');
+  const [hourlyRate, setHourlyRate] = useState('75');
   const [availability, setAvailability] = useState<Record<string, string[]>>({});
+  const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
 
   const totalSteps = role === 'mentor' ? 4 : 2;
 
@@ -64,6 +73,20 @@ export default function OnboardingPage() {
       }),
     });
 
+    // Update profile with role and name
+    const existingProfile = JSON.parse(localStorage.getItem('dz_profile') || '{}')
+    localStorage.setItem('dz_profile', JSON.stringify({
+      ...existingProfile,
+      name: name || existingProfile.name,
+      role: role || 'mentee',
+      bio,
+      ...(role === 'mentor' && {
+        categories,
+        expertise,
+        hourlyRate,
+      }),
+    }))
+
     // Redirect based on role
     if (role === 'mentor') {
       router.push('/dashboard/mentor');
@@ -96,6 +119,46 @@ export default function OnboardingPage() {
     });
   };
 
+  const handleLinkedInImport = (profile: LinkedInProfile) => {
+    // Pre-fill form with LinkedIn data
+    setName(profile.name);
+    setBio(profile.summary || profile.headline || '');
+
+    // Map LinkedIn skills/experience to our categories
+    const skillKeywords: Record<string, string[]> = {
+      'Software Engineering': ['software', 'programming', 'developer', 'engineer', 'coding', 'javascript', 'python', 'react', 'backend', 'frontend', 'fullstack'],
+      'Product Management': ['product', 'pm', 'roadmap', 'agile', 'scrum', 'strategy'],
+      'Data Science & AI': ['data', 'machine learning', 'ai', 'analytics', 'statistics', 'python', 'sql', 'ml'],
+      'UX/UI Design': ['design', 'ux', 'ui', 'figma', 'user experience', 'user interface', 'prototype'],
+      'Marketing & Growth': ['marketing', 'growth', 'seo', 'content', 'social media', 'brand', 'advertising'],
+      'Finance & Investing': ['finance', 'investment', 'banking', 'accounting', 'trading', 'portfolio'],
+      'Career Transitions': ['career', 'transition', 'coaching', 'resume', 'interview'],
+      'Startups & Entrepreneurship': ['startup', 'entrepreneur', 'founder', 'venture', 'business'],
+      'Leadership & Management': ['leadership', 'management', 'team', 'director', 'executive', 'ceo', 'cto'],
+      'Healthcare & Medicine': ['healthcare', 'medical', 'doctor', 'nurse', 'hospital', 'clinical', 'health'],
+      'Legal & Compliance': ['legal', 'law', 'attorney', 'compliance', 'regulation', 'lawyer'],
+      'Immigration & Visa': ['immigration', 'visa', 'relocation', 'expat', 'international'],
+    };
+
+    const allText = [
+      ...profile.skills,
+      profile.headline || '',
+      ...(profile.experience?.map(e => `${e.title} ${e.company}`) || [])
+    ].join(' ').toLowerCase();
+
+    const matchedCategories = CATEGORIES.filter(category => {
+      const keywords = skillKeywords[category] || [];
+      return keywords.some(keyword => allText.includes(keyword));
+    }).slice(0, 4);
+
+    if (matchedCategories.length > 0) {
+      setCategories(matchedCategories);
+    }
+
+    // Show success feedback
+    alert('LinkedIn profile imported successfully! Review and edit the information below.');
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
       <div className="w-full max-w-3xl">
@@ -120,8 +183,8 @@ export default function OnboardingPage() {
           {/* Step 1: Role Selection */}
           {step === 1 && (
             <div>
-              <h2 className="text-3xl font-bold mb-2">Welcome to MentorMatch!</h2>
-              <p className="text-gray-400 mb-8">Let's get you started. What brings you here?</p>
+              <h2 className="text-3xl font-bold mb-2">Welcome to DayZero!</h2>
+              <p className="text-gray-400 mb-8">Connect with experts who've been where you want to go. What brings you here?</p>
 
               <div className="grid md:grid-cols-2 gap-4">
                 <button
@@ -132,10 +195,10 @@ export default function OnboardingPage() {
                       : 'border-gray-700 hover:border-gray-600'
                   }`}
                 >
-                  <div className="text-4xl mb-4">🎓</div>
-                  <h3 className="text-xl font-bold mb-2">I want to learn</h3>
+                  <div className="text-4xl mb-4">🚀</div>
+                  <h3 className="text-xl font-bold mb-2">I'm looking for guidance</h3>
                   <p className="text-gray-400 text-sm">
-                    Find expert German mentors and improve your language skills
+                    Find mentors who can help with career growth, skill development, or life transitions
                   </p>
                 </button>
 
@@ -147,10 +210,10 @@ export default function OnboardingPage() {
                       : 'border-gray-700 hover:border-gray-600'
                   }`}
                 >
-                  <div className="text-4xl mb-4">👨‍🏫</div>
-                  <h3 className="text-xl font-bold mb-2">I want to mentor</h3>
+                  <div className="text-4xl mb-4">💡</div>
+                  <h3 className="text-xl font-bold mb-2">I want to mentor others</h3>
                   <p className="text-gray-400 text-sm">
-                    Share your German expertise and earn money helping others
+                    Share your expertise, help others grow, and earn money doing it
                   </p>
                 </button>
               </div>
@@ -162,6 +225,21 @@ export default function OnboardingPage() {
             <div>
               <h2 className="text-3xl font-bold mb-2">Create Your Profile</h2>
               <p className="text-gray-400 mb-8">Tell us a bit about yourself</p>
+
+              {/* LinkedIn Import - Only for mentors */}
+              {role === 'mentor' && (
+                <div className="mb-6">
+                  <LinkedInImportButton
+                    onClick={() => setIsLinkedInModalOpen(true)}
+                    variant="secondary"
+                    size="md"
+                    className="w-full"
+                  />
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    Save time by importing your professional info from LinkedIn
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-6">
                 {/* Profile Photo */}
@@ -204,8 +282,8 @@ export default function OnboardingPage() {
                     onChange={(e) => setBio(e.target.value)}
                     placeholder={
                       role === 'mentor'
-                        ? 'Tell learners about your teaching style and experience...'
-                        : 'Tell us about your German learning goals...'
+                        ? 'Share your background, expertise, and what you can help mentees with...'
+                        : 'Tell us about your goals and what guidance you are looking for...'
                     }
                     className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                     rows={4}
@@ -220,14 +298,14 @@ export default function OnboardingPage() {
             <div>
               <h2 className="text-3xl font-bold mb-2">Your Expertise</h2>
               <p className="text-gray-400 mb-8">
-                Help learners find you by sharing what you teach
+                Help mentees find you by sharing your areas of expertise
               </p>
 
               <div className="space-y-6">
                 {/* Categories */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-3">
-                    Teaching Categories *
+                    Areas of Expertise *
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {CATEGORIES.map((category) => (
@@ -254,7 +332,7 @@ export default function OnboardingPage() {
                 {/* Expertise Levels */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-3">
-                    Student Levels You Teach *
+                    Experience Level You Can Mentor *
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {EXPERTISE_LEVELS.map((level) => (
@@ -281,18 +359,18 @@ export default function OnboardingPage() {
                 {/* Hourly Rate */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-3">
-                    Hourly Rate (€) *
+                    Hourly Rate ($) *
                   </label>
                   <input
                     type="number"
                     value={hourlyRate}
                     onChange={(e) => setHourlyRate(e.target.value)}
                     min="10"
-                    max="200"
+                    max="500"
                     className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <p className="text-xs text-gray-500 mt-2">
-                    Recommended: €20-50 per hour. You'll earn 90% after platform fees.
+                    Recommended: $50-150 per hour based on expertise. You'll earn 85% after platform fees.
                   </p>
                 </div>
               </div>
@@ -304,7 +382,7 @@ export default function OnboardingPage() {
             <div>
               <h2 className="text-3xl font-bold mb-2">Set Your Availability</h2>
               <p className="text-gray-400 mb-8">
-                When are you typically available to teach? You can adjust this later.
+                When are you typically available for sessions? You can adjust this later.
               </p>
 
               <div className="space-y-3">
@@ -363,6 +441,13 @@ export default function OnboardingPage() {
           </div>
         </div>
       </div>
+
+      {/* LinkedIn Import Modal */}
+      <LinkedInImportModal
+        isOpen={isLinkedInModalOpen}
+        onClose={() => setIsLinkedInModalOpen(false)}
+        onImport={handleLinkedInImport}
+      />
     </div>
   );
 }

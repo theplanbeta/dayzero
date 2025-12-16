@@ -12,15 +12,32 @@ export default function Navigation({ className = '' }: NavigationProps) {
   const pathname = usePathname()
   const [userLevel, setUserLevel] = useState<string>('A1')
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const level = localStorage.getItem('gb_proficiency_level') || 'A1'
-      const token = localStorage.getItem('gb_token')
-      setUserLevel(level)
+      // Check for DayZero token (new) or legacy token
+      const token = localStorage.getItem('dz_token') || localStorage.getItem('gb_token')
       setIsAuthenticated(!!token)
     }
   }, [])
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false)
+  }, [pathname])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
 
   const navItems = [
     {
@@ -44,6 +61,16 @@ export default function Navigation({ className = '' }: NavigationProps) {
       gradient: 'from-purple-500 to-pink-500'
     },
     {
+      href: '/categories',
+      label: 'Categories',
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+        </svg>
+      ),
+      gradient: 'from-teal-500 to-cyan-500'
+    },
+    {
       href: '/bookings',
       label: 'Bookings',
       icon: (
@@ -53,16 +80,6 @@ export default function Navigation({ className = '' }: NavigationProps) {
       ),
       gradient: 'from-green-500 to-emerald-500'
     },
-    {
-      href: '/dashboard',
-      label: 'Dashboard',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      gradient: 'from-orange-500 to-red-500'
-    }
   ]
 
   return (
@@ -122,35 +139,133 @@ export default function Navigation({ className = '' }: NavigationProps) {
             })}
           </div>
 
-          {/* Profile/Auth */}
+          {/* Search Button and Profile/Auth */}
           <div className="flex items-center space-x-3">
-            {isAuthenticated ? (
-              <Link
-                href="/auth"
-                className="relative group flex items-center space-x-2 px-3 py-2 rounded-xl transition-all duration-300 text-gray-400 hover:text-white"
-              >
-                <div className="absolute inset-0 bg-white/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center relative z-10">
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            {/* Search Button */}
+            <Link
+              href="/search"
+              className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 hover:border-gray-600 text-gray-400 hover:text-white transition-all duration-300"
+              aria-label="Search"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </Link>
+
+            {/* Auth Button - hidden on mobile when menu is open */}
+            <div className="hidden sm:block">
+              {isAuthenticated ? (
+                <Link
+                  href="/auth"
+                  className="relative group flex items-center space-x-2 px-3 py-2 rounded-xl transition-all duration-300 text-gray-400 hover:text-white"
+                >
+                  <div className="absolute inset-0 bg-white/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center relative z-10">
+                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium relative z-10">Profile</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/auth"
+                  className="relative group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 hover:from-blue-500/30 hover:to-purple-500/30"
+                >
+                  <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                   </svg>
-                </div>
-                <span className="hidden sm:block text-sm font-medium relative z-10">Profile</span>
-              </Link>
-            ) : (
-              <Link
-                href="/auth"
-                className="relative group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 hover:from-blue-500/30 hover:to-purple-500/30"
-              >
-                <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  <span className="text-sm font-medium text-blue-400">Sign In</span>
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="sm:hidden relative z-50 w-10 h-10 flex items-center justify-center rounded-xl bg-gray-800/50 border border-gray-700/50 text-gray-400 hover:text-white transition-colors"
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <span className="text-sm font-medium text-blue-400 hidden sm:block">Sign In</span>
-              </Link>
-            )}
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="sm:hidden fixed inset-0 z-40 bg-gray-900/95 backdrop-blur-xl">
+          <div className="flex flex-col h-full pt-20 pb-6 px-6">
+            {/* Mobile Search */}
+            <Link
+              href="/search"
+              className="flex items-center space-x-3 px-4 py-3 mb-4 bg-gray-800/50 border border-gray-700/50 rounded-xl text-gray-300"
+            >
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <span>Search mentors...</span>
+            </Link>
+
+            {/* Navigation Items */}
+            <nav className="flex-1 space-y-2">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-300 ${
+                      isActive
+                        ? `bg-gradient-to-r ${item.gradient} text-white`
+                        : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
+                    }`}
+                  >
+                    <div className={isActive ? 'text-white' : 'text-gray-400'}>{item.icon}</div>
+                    <span className="text-lg font-medium">{item.label}</span>
+                  </Link>
+                )
+              })}
+            </nav>
+
+            {/* Mobile Auth Button */}
+            <div className="pt-6 border-t border-gray-800">
+              {isAuthenticated ? (
+                <Link
+                  href="/auth"
+                  className="flex items-center space-x-4 px-4 py-4 rounded-xl bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30"
+                >
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <span className="text-lg font-medium text-green-400">My Profile</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/auth"
+                  className="flex items-center justify-center space-x-2 px-4 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium text-lg"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                  </svg>
+                  <span>Sign In</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   )
 }

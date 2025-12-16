@@ -47,7 +47,7 @@ export default function MentorsPage() {
               </span>
             </h1>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Connect with experienced professionals who understand your journey to success in Germany
+              Connect with experienced professionals who can guide your career, skills, and growth
             </p>
           </div>
 
