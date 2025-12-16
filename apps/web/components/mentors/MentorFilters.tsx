@@ -15,19 +15,18 @@ interface MentorFiltersProps {
 
 const LANGUAGES = [
   'English',
-  'Spanish',
-  'Mandarin',
-  'French',
+  'German',
   'Hindi',
-  'Korean',
-  'Russian',
-  'Portuguese',
-  'Japanese',
+  'Malayalam',
+  'Tamil',
+  'Telugu',
+  'Spanish',
+  'French',
 ]
 
 export default function MentorFilters({ filters, onFiltersChange }: MentorFiltersProps) {
   const [minPrice, setMinPrice] = useState(filters.minPrice || 0)
-  const [maxPrice, setMaxPrice] = useState(filters.maxPrice || 300)
+  const [maxPrice, setMaxPrice] = useState(filters.maxPrice || 50)
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(filters.languages || [])
   const [availableNow, setAvailableNow] = useState(filters.availableNow || false)
   const [minRating, setMinRating] = useState(filters.minRating || 0)
@@ -64,14 +63,14 @@ export default function MentorFilters({ filters, onFiltersChange }: MentorFilter
 
   const handleClearFilters = () => {
     setMinPrice(0)
-    setMaxPrice(300)
+    setMaxPrice(50)
     setSelectedLanguages([])
     setAvailableNow(false)
     setMinRating(0)
     onFiltersChange({})
   }
 
-  const hasActiveFilters = minPrice > 0 || maxPrice < 300 || selectedLanguages.length > 0 || availableNow || minRating > 0
+  const hasActiveFilters = minPrice > 0 || maxPrice < 50 || selectedLanguages.length > 0 || availableNow || minRating > 0
 
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-5">
@@ -134,7 +133,7 @@ export default function MentorFilters({ filters, onFiltersChange }: MentorFilter
               <input
                 type="range"
                 min="0"
-                max="300"
+                max="50"
                 value={maxPrice}
                 onChange={(e) => handlePriceChange('max', Number(e.target.value))}
                 className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
